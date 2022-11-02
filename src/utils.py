@@ -19,7 +19,7 @@ import json
 from . import config as c
 
 
-def create_folders_for_output(parent_dir):
+def create_folder_for_output(parent_dir):
     """ create an output folder,
     to store all the outputs of the trained model:
     weights of models, metrics of models """
@@ -186,6 +186,57 @@ def create_metrics_report_table(model_names, y_preds, y_trues):
     df.loc[len(df.index)] = [None, None, None, None, None]
     # print(df)
     return df
+
+
+
+def auto_correct_config(window_size, stride_pred, train_ratio=0.8, feature_list=None):
+    """ automatically correct value in config.py file
+    when window_size and stride_pred change value """
+    if feature_list is not None:
+        c.features_list = feature_list
+        c.num_feature = len(feature_list)
+
+    c.stride_pred = stride_pred
+    c.window_size = window_size
+    c.unique_name = str(stride_pred) + 'h-' + str(window_size) + 'T'
+
+    c.model_hyperparams['window_size'] = window_size
+    c.model_hyperparams['stride_pred'] = stride_pred
+    c.model_hyperparams['unique_name'] = str(stride_pred) + 'h-' + str(window_size) + 'T'
+    c.model_hyperparams['train_ratio'] = train_ratio
+    return
+
+def draw_comparison_graph(y_pred, y_true):
+    plt.plot(y_pred[:200], color='r')
+    plt.plot(y_true[:200], color='b')
+    plt.title(f'LSTM-TSLightGBM-{c.unique_name} predict of PM2.5 concentration')
+    plt.xlabel("Time")
+    plt.ylabel("ug/m3")
+    plt.legend(('prediction', 'reality'), loc='upper right')
+    plt.savefig(os.path.join(c.img_output, 'comp_graph', c.unique_name + '.png'))
+    plt.clf()
+
+
+def draw_scatter_plot(y_pred, y_true):
+    slope, intercept, r, p, stderr = scipy.stats.linregress(y_pred, y_true)
+    line = f'Regression line y:{intercept:.2f}+{slope:.2f}, r={r:.2f}'
+
+    fig, ax = plt.subplots()
+    ax.plot(y_pred, y_true, linewidth=0, marker='s', label='Data points')
+    ax.plot(y_pred, intercept + slope * y_pred, label=line)
+    ax.set_xlabel('y_pred')
+    ax.set_ylabel('y_true')
+    ax.legend(facecolor='white')
+    plt.savefig(os.path.join(c.img_output, 'scatter_plot', c.unique_name + '.png'))
+    plt.clf()
+
+
+def store_model_configuration():
+    config_dict = {'model_hyperparams': c.model_hyperparams, 'lstm_params': c.lstm_params, 'lgbm_params': c.lgbm_params}
+
+    file_config_dir = os.path.join(c.config_dir, c.unique_name + '.json')
+    with open(file_config_dir, 'w') as f:
+        json.dump(config_dict, f, ensure_ascii=False, indent=4)
 
 
 
