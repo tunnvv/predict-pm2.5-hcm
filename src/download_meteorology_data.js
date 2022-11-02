@@ -78,7 +78,7 @@ for (let date of datelist) {
             // Save data of all hour in this date
             data = objs;
             const csv = new ObjectsToCsv(data)
-            csv.toDisk(`../data/${fname}.csv`);
+            csv.toDisk(`../data/raw_data/hcm_meteorological_data/${fname}.csv`);
         })
         .catch(error => {
             console.error(error)
