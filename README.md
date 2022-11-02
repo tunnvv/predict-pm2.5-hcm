@@ -1,5 +1,6 @@
 # Bài toán dự đoán nồng độ bụi mịn PM2.5 tại Thành Phố HCM.
 ## Sinh viên: Nguyễn Văn Tú - 19021381
+Dự đoán nồng độ bụi mịn PM2.5 trên một trạm quan trắc tại Thành phố Hồ Chí Minh, tham khảo và triển khai theo bài báo [Prediction of PM2.5 Concentration Based on the LSTM-TSLightGBM Variable Weight Combination Model](https://www.mdpi.com/2073-4433/12/9/1211/htm) của tác giả [Xuchu Jiang](https://sciprofiles.com/profile/1563874) và các cộng sự xuất bản năm 2021.
 
 # I. Tải dữ liệu
 ## Tải dữ liệu khí tượng
@@ -22,7 +23,7 @@ $ node src/download_meteorology_data.js
 ```
 - Dữ liệu được tải về sẽ được lưu trong folder data: bao gồm nhiều file csv mỗi file tương ứng dữ liệu khí
 tượng của một ngày.
-- Nó bị lỗi, dừng lại vì mất 1 ngày dữ liệu 20190111.csv, nhưng 1 ngày ko đáng kể trong 3 năm dữ liệu thu về 
+- Mất 1 ngày dữ liệu 20190111.csv
 
 ## Tải dữ liệu PM2.5
 Tải về [Dữ liệu PM2.5](https://www.airnow.gov/international/us-embassies-and-consulates/) của HCM trong 3 năm (2019, 2020, 2021).
@@ -38,10 +39,10 @@ Tải về [Dữ liệu PM2.5](https://www.airnow.gov/international/us-embassies
 #### Cuối cùng tạo ra file dữ liệu được làm sạch: clean_data.csv
 
 # III. Huấn luyện mô hình
-Module huấn luyện mô hình LSTM-TSLightGBM kết hợp tự động cho tất cả các khung thời gian cài đặt, ví dụ: 
+Module huấn luyện mô hình LSTM-TSLightGBM kết hợp, và tự động hóa cho tất cả các khung thời gian, ví dụ: 
 + Dùng dữ liệu 8 tiếng liên tục để dự đoán nồng độ bụi mịn 4h tiếp theo ( window_size = 8, stride_pred = 4 )
 
-Thí nghiệm lấy tổ hợp nhiều giá trị window_size khác nhau để đự đoán với các khoảng cách stride_pred khác nhau
+Thí nghiệm lấy tổ hợp nhiều giá trị window_size khác nhau để dự đoán các khoảng cách stride_pred khác nhau
 
     
     {window_sizes = [4, 8, 10, 12, 16, 18, 24, 32]} ...dự đoán... {stride_preds = [1, 2, 4, 8]}
