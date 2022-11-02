@@ -68,7 +68,7 @@ $ python3 -m src.main
 ### Đào tạo nhanh với GPU trên colab
 Tạo notebook colab rồi lần lượt chạy lệnh sau
 ```console
-!git clone "git@github.com:tunnvv/predict-pm2.5-hcm.git"
+!git clone "https://github.com/tunnvv/predict-pm2.5-hcm.git"
 ```
 ```console
 %cd /content/predict-pm2.5-hcm
