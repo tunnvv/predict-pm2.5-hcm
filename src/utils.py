@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 
 def create_folder_for_output(parent_dir):
     """ create an output folder,
@@ -31,3 +32,8 @@ def create_folder_for_output(parent_dir):
     create_folder(os.path.join(parent_dir, 'output', 'img', 'scatter_plot'))
 
     create_folder(os.path.join(parent_dir, 'output', 'lstm_model', 'loggers'))
+
+def load_data(data_dir):
+    """ read csv file data to dataframe """
+    df = pd.read_csv(data_dir)
+    return df
