@@ -19,6 +19,9 @@ def main():
     print("Checking correctness of sample generation ::")
     print(f"The shape of a sample is {X[0].shape}, the correct shape is ({c.window_size}, {c.num_feature}))")
 
+    # split data in to train/validation
+    x_train, y_train, x_test, y_test = split_data(X, y, c.train_ratio)
+
 
 if __name__ == '__main__':
     main()

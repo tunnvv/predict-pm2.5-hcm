@@ -127,3 +127,10 @@ def normalize_data(X):
     X = sc.fit_transform(X.reshape(-1, ws * fn))
     X = X.reshape(-1, ws, fn)
     return X
+
+def split_data(X, y, train_ratio):
+    split_point = round(len(X) * train_ratio)
+    x_train, x_test = X[:split_point], X[split_point:]
+    y_train, y_test = y[:split_point], y[split_point:]
+
+    return x_train, y_train, x_test, y_test
