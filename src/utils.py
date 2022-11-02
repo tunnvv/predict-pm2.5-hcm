@@ -188,7 +188,6 @@ def create_metrics_report_table(model_names, y_preds, y_trues):
     return df
 
 
-
 def auto_correct_config(window_size, stride_pred, train_ratio=0.8, feature_list=None):
     """ automatically correct value in config.py file
     when window_size and stride_pred change value """
