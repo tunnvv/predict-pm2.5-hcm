@@ -13,6 +13,12 @@ def main():
     df = load_data(data_dir=data_dir)
     print(df.columns)
 
+    """ ================ PREPARE DATA TRAINING ================ """
+    X, y = generate_time_series_data(df, c.window_size, c.stride_pred)
+    X = normalize_data(X)
+    print("Checking correctness of sample generation ::")
+    print(f"The shape of a sample is {X[0].shape}, the correct shape is ({c.window_size}, {c.num_feature}))")
+
 
 if __name__ == '__main__':
     main()
