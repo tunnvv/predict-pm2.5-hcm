@@ -22,3 +22,6 @@ $ node src/download_meteorology_data.js
 ```
 - Dữ liệu được tải về sẽ được lưu trong folder data: bao gồm nhiều file csv mỗi file tương ứng dữ liệu khí
 tượng của một ngày.
+
+## Tải dữ liệu PM2.5
+Tải về [Dữ liệu PM2.5](https://www.airnow.gov/international/us-embassies-and-consulates/) của HCM trong 3 năm (2019, 2020, 2021).
