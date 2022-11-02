@@ -29,11 +29,10 @@ Tải về [Dữ liệu PM2.5](https://www.airnow.gov/international/us-embassies
 
 # Tiền xử lý dữ liệu 
 ### Công việc thực hiện
-+ Gộp các file csv dữ liệu thành cơ sở dữ liệu 3 năm.
++ Gộp các file csv dữ liệu thành cơ sở dữ liệu 3 năm (dữ liệu lưu theo 24 điểm tương ứng 24h trong ngày).
 + Xóa các cột dữ liệu bị thiếu - không mang lại thông tin hiệu quả.
 + Số hóa các cột dữ liệu đang ở dạng string
 + Format lại các biểu diễn dữ liệu (cột thời gian)
-+ Áp dụng kỹ thuật Linear Interpolation để gen ra các cột dữ liệu thiếu (khoảng cách < 3h). Nếu lớn hơn ta sẽ loại bỏ.
-
++ Áp dụng kỹ thuật Linear Interpolation để gen ra các dữ liệu thiếu (khoảng cách <3h). Nếu lớn hơn khoảng dữ liệu bị thiếu lớn hơn 3h ta sẽ loại bỏ.
 #### Chi tiết quy trình, code tiền xử lý được mô tả rõ trong file data/preprocess_data.ipynb
 #### Cuối cùng tạo ra file dữ liệu được làm sạch: clean_data.csv
