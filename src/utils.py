@@ -18,10 +18,12 @@ import json
 
 from . import config as c
 
-def create_folder_for_output(parent_dir):
+
+def create_folders_for_output(parent_dir):
     """ create an output folder,
     to store all the outputs of the trained model:
     weights of models, metrics of models """
+
 
     def create_folder(folder_path):
         folder_path = os.path.abspath(folder_path)
@@ -50,10 +52,12 @@ def create_folder_for_output(parent_dir):
 
     create_folder(os.path.join(parent_dir, 'output', 'lstm_model', 'loggers'))
 
+
 def load_data(data_dir):
     """ read csv file data to dataframe """
     df = pd.read_csv(data_dir)
     return df
+
 
 def generate_time_series_data(df, window_size, stride_pred):
     """ generate time series data with existing dataframe
@@ -117,6 +121,7 @@ def generate_time_series_data(df, window_size, stride_pred):
 
     return X, y
 
+
 def normalize_data(X):
     """ Min Max Scaler for time series data in np.array format,
      have shape (length, window_size, feature_num) """
@@ -128,9 +133,73 @@ def normalize_data(X):
     X = X.reshape(-1, ws, fn)
     return X
 
+
 def split_data(X, y, train_ratio):
     split_point = round(len(X) * train_ratio)
     x_train, x_test = X[:split_point], X[split_point:]
     y_train, y_test = y[:split_point], y[split_point:]
 
     return x_train, y_train, x_test, y_test
+
+
+def compute_weight_sharing(ytr_pred1, ytr_pred2, ytr_true):
+    """ Compute the shared weights based on the results
+    of the two models predicting the results of the training dataset """
+    E1 = np.abs(ytr_pred1 - ytr_true)
+    E2 = np.abs(ytr_pred2 - ytr_true)
+    E = np.array([[E1.dot(E1), E1.dot(E2)], [E2.dot(E1), E2.dot(E2)]])
+
+    R = np.array([1, 1])
+    E_inv = np.linalg.pinv(E)
+
+    w = E_inv.dot(R) / R.T.dot(E_inv).dot(R)
+    w1, w2 = w
+    return w1, w2
+
+def store_weight_sharing(w1, w2):
+    c.model_hyperparams['w1'] = w1
+    c.model_hyperparams['w2'] = w2
+
+def calculate_metrics(y_p, y_t):
+    """ calculate metrics based on the predicted output and actual output of the testset """
+    mae = mean_absolute_error(y_p, y_t)
+    rmse = math.sqrt(mean_squared_error(y_p, y_t))
+    r2 = r2_score(y_p, y_t)
+    R = np.corrcoef(y_p, y_t)[0][1]
+    print(f"Metrics of: \nmae = {round(mae,2)} \nrmse = {round(rmse,2)} \nr^2 = {round(r2,2)} \nR = {round(R,2)}\n")
+
+    return round(mae,2), round(rmse,2), round(r2,2), round(R,2)
+
+
+def create_metrics_report_table(model_names, y_preds, y_trues):
+    """ calculate metrics and create a dataframe
+    that stores metrics of the list of models """
+
+    df = pd.DataFrame(columns=['Model', 'MAE', 'RMSE', 'r2', 'R'])
+
+    for i in range(len(model_names)):
+        model_names_i, y_pred_i = model_names[i], y_preds[i]
+        mae_i, rmse_i, r2_i, R_i = calculate_metrics(y_pred_i, y_trues[i])
+        model_names_i = model_names_i + '-' + c.unique_name
+        df.loc[len(df.index)] = [model_names_i, mae_i, rmse_i, r2_i, R_i]
+
+    df.loc[len(df.index)] = [None, None, None, None, None]
+    # print(df)
+    return df
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
