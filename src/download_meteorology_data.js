@@ -4,7 +4,7 @@ const ObjectsToCsv = require('objects-to-csv')
 
 var getDaysArray = function(s,e) {for(var a=[],d=new Date(s);d<=e;d.setDate(d.getDate()+1)){ a.push(new Date(d));}return a;};
 // Get all date of 3 year
-var datelist = getDaysArray(new Date("2021-01-01"), new Date("2021-12-31"))
+var datelist = getDaysArray(new Date("2019-01-01"), new Date("2021-12-31"))
 console.log(datelist.length)
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
@@ -78,7 +78,7 @@ for (let date of datelist) {
             // Save data of all hour in this date
             data = objs;
             const csv = new ObjectsToCsv(data)
-            csv.toDisk(`../data/raw_data/hcm_meteorological_data/${fname}.csv`);
+            csv.toDisk(`../data/raw_data/abc/${fname}.csv`);
         })
         .catch(error => {
             console.error(error)
