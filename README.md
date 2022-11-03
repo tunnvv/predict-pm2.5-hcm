@@ -81,4 +81,10 @@ Zip file kết quả và download về
 ```console
 !zip -r /content/predict-pm2.5-hcm/output.zip /content/predict-pm2.5-hcm/output
 ```
+# IV. Test mô hình
+Test hiệu quả dự đoán của mô hình LSTM-TSLightGBM trên tập test.
 
+Mô hình đã train có tên 1h-4T, 1h-8T, ... 8h-32T tương ứng với khoảng cách dự đoán và window_size muốn test
+```console
+$ python3 src.api_test --model_name
+```
